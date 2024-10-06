@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -47,6 +49,12 @@ func (csvBool *CSVBool) UnmarshalCSV(csvValue string) (err error) {
 	return err
 }
 
+func (csvBool *CSVBool) MarshalJSON() ([]byte, error) {
+	parsedValue := csvBool.bool
+
+	return json.Marshal(parsedValue)
+}
+
 func parseTrailCSV(fileLocation string) (err error) {
 	csvFile, err := os.Open(fileLocation)
 	if err != nil {
@@ -63,9 +71,17 @@ func parseTrailCSV(fileLocation string) (err error) {
 	return nil
 }
 
+func getAllTrails(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, trails)
+}
+
 func main() {
-	parseTrailCSV("BoulderTrailHeads.csv")
+	if err := parseTrailCSV("BoulderTrailHeads.csv"); err!= nil {
+		panic(err)
+	}
+
 	router := gin.Default()
+	router.GET("/trails", getAllTrails)
 	
 	router.Run("localhost:8080")
 }
