@@ -120,6 +120,17 @@ func getBikeTrailsPicnic(c *gin.Context) {
 	c.JSON(http.StatusOK, bikeTrailsWithPicnic)
 }
 
+func getTrailByName(c *gin.Context) {
+	for _, trail := range trails {
+		if trail.AccessName == c.Param("name") {
+			c.JSON(http.StatusOK, trail)
+			return
+		}
+	}
+
+	c.JSON(http.StatusNotFound, gin.H{"message" : "trail not found"})
+}
+
 func main() {
 	if err := parseTrailsCSV("BoulderTrailHeads.csv"); err!= nil {
 		panic(err)
@@ -130,7 +141,7 @@ func main() {
 	router.GET("/trails/with-grills", getTrailsWithGrills)
 	router.GET("/bike-trails/", getBikeTrails)
 	router.GET("/bike-trails/with-picinc", getBikeTrailsPicnic)
-	
+	router.GET("/trails/by-name/:name", getTrailByName)
 	
 	router.Run("localhost:8080")
 }
