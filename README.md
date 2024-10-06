@@ -42,6 +42,8 @@ Then run the project:
 
 This was my first "real" golang project. I had toyed with it before but have very "surface-level" knowledge of it.
 
+At first I wanted to use the geojson file provided by the Boulder county, but I quickly realised it contained way less data than the csv that was provided in the SAP repository, which is why I went with it.
+
 Splitting the project in modules came way too late in the development process. I would start with that next time, that would allow a better separation of concerns and would allow me to design the project with the MVC design pattern.
 
 I would also add unit testing.
