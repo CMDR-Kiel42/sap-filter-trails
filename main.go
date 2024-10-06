@@ -32,6 +32,7 @@ type Trail struct {
 	Class 			string	`csv:"Class"`
 	Address 		string	`csv:"Address"`
 	HasFee 			string	`csv:"Fee"`
+	IsBikeTrail		CSVBool	`csv:"BikeTrail"`
 }
 
 var trails = []Trail{}
@@ -72,7 +73,19 @@ func parseTrailCSV(fileLocation string) (err error) {
 }
 
 func getAllTrails(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, trails)
+	c.JSON(http.StatusOK, trails)
+}
+
+func getBikeTrails(c *gin.Context) {
+	bikeTrails := []Trail{}
+
+	for _, trail := range trails {
+		if trail.IsBikeTrail.bool {
+			bikeTrails = append(bikeTrails, trail)
+		}
+	}
+
+	c.JSON(http.StatusOK, bikeTrails)
 }
 
 func main() {
@@ -82,6 +95,7 @@ func main() {
 
 	router := gin.Default()
 	router.GET("/trails", getAllTrails)
+	router.GET("/bike-trails/", getBikeTrails)
 	
 	router.Run("localhost:8080")
 }
