@@ -143,5 +143,5 @@ func main() {
 	router.GET("/bike-trails/with-picinc", getBikeTrailsPicnic)
 	router.GET("/trails/by-name/:name", getTrailByName)
 	
-	router.Run("localhost:8080")
+	router.Run("0.0.0.0:3001")
 }
